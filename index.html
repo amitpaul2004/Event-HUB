@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Events</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .event-card { border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+        .event-card h2 { margin-top: 0; }
+        .event-card a { text-decoration: none; background: #007bff; color: white; padding: 8px 12px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Upcoming Events & Seminars</h1>
+    <div id="event-list">
+        </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('http://127.0.0.1:5000/api/events')
+                .then(response => response.json())
+                .then(events => {
+                    const eventList = document.getElementById('event-list');
+                    if (events.length === 0) {
+                        eventList.innerHTML = '<p>No upcoming events.</p>';
+                        return;
+                    }
+                    
+                    events.forEach(event => {
+                        const eventCard = document.createElement('div');
+                        eventCard.className = 'event-card';
+                        eventCard.innerHTML = `
+                            <h2>${event.title}</h2>
+                            <p><strong>When:</strong> ${new Date(event.start_time).toLocaleString()}</p>
+                            <p><strong>Where:</strong> ${event.location}</p>
+                            <p>${event.description.substring(0, 150)}...</p>
+                            <a href="register.html?event_id=${event.event_id}">Register Now</a>
+                        `;
+                        eventList.appendChild(eventCard);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching events:', error);
+                    document.getElementById('event-list').innerHTML = '<p>Error loading events.</p>';
+                });
+        });
+    </script>
+</body>
+</html>
