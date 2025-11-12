@@ -7,8 +7,8 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #0b0c10; /* Dark background */
-    color: #ffffff;
+    background-color: #0b0c10; /* Changed back to dark background for consistency */
+    color: #ffffff; /* Default text color to white for dark backgrounds */
     line-height: 1.6;
 }
 
@@ -22,14 +22,21 @@ a {
     background-color: #1a1a2e; /* Dark blue-ish grey */
     padding: 1rem 2rem;
     border-bottom: 1px solid #2a2a4e;
+    color: #ffffff; /* Ensure navbar text is white */
 }
 
 .navbar-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
 }
 
 .logo {
@@ -54,7 +61,7 @@ a {
 
 .nav-links a.active {
     color: #ffffff;
-    border-bottom: 2px solid #4a90e2; /* Blue underline for active link */
+    border-bottom: 2px solid #4a90e2;
 }
 
 /* Base Button Style */
@@ -80,25 +87,25 @@ a {
 
 /* --- Hero Section --- */
 .hero {
-    /* Replace with your own image URL */
     background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjUyOXwwfDF8c2VhcmNofDEwfHxzZW1pbmFyfGVufDB8fHx8MTcwMDIwNTQ2OXww&ixlib=rb-4.0.3&q=80&w=1080');
     background-size: cover;
     background-position: center;
-    height: 90vh; /* Takes 90% of the viewport height */
+    height: 90vh;
     display: flex;
     align-items: center;
     padding: 0 2rem;
+    color: #ffffff;
 }
 
 .hero-content {
-    max-width: 600px;
+    max-width: 750px;
     padding: 2.5rem;
     border-radius: 16px;
     
     /* "Glassmorphism" Effect */
-    background-color: rgba(11, 12, 16, 0.7); /* Semi-transparent background */
-    backdrop-filter: blur(10px); /* This creates the blur */
-    -webkit-backdrop-filter: blur(10px); /* Safari support */
+    background-color: rgba(11, 12, 16, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -112,7 +119,7 @@ a {
 .hero-content p {
     font-size: 1.1rem;
     margin-bottom: 2rem;
-    color: #e0e0e0; /* Slightly lighter than pure white */
+    color: #e0e0e0;
 }
 
 .hero-buttons {
@@ -140,5 +147,90 @@ a {
 
 .btn-secondary:hover {
     background-color: #ffffff;
-    color: #1a1a2e; /* Dark color for text on hover */
+    color: #1a1a2e;
+}
+
+/* --- UPDATED FEATURES SECTION STYLES --- */
+.features {
+    padding: 5rem 2rem;
+    text-align: center;
+    color: #ffffff; /* Ensure text is white against the dark background */
+    position: relative; /* Needed for the pseudo-element */
+    overflow: hidden; /* Ensures blur doesn't bleed out if content overflows */
+    
+    /* Background Image for the features section */
+    background-image: url(Frontend\img\images.jpg); /* Replace with your desired image */
+    background-size: cover;
+    background-position: center;
+}
+
+/* Pseudo-element for the blur and dark overlay */
+.features::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(11, 12, 16, 0.7); /* Dark overlay */
+    backdrop-filter: blur(8px); /* Blur effect */
+    -webkit-backdrop-filter: blur(8px); /* Safari support */
+    z-index: 1; /* Place behind the content */
+}
+
+.features-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 3rem;
+    position: relative; /* Bring container above the pseudo-element */
+    z-index: 2; /* Higher than the pseudo-element's z-index */
+}
+
+.feature-card {
+    flex: 1;
+    min-width: 280px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent card background for glassmorphism look */
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px); /* Optional: add a slight blur to the cards themselves */
+    -webkit-backdrop-filter: blur(5px);
+    position: relative; /* Bring card above the pseudo-element */
+    z-index: 2; /* Higher than the pseudo-element's z-index */
+}
+
+.icon-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: rgba(74, 144, 226, 0.2); /* Semi-transparent blue for circle */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.icon-circle i {
+    font-size: 2.2rem;
+    color: #4a90e2; /* Blue icon color */
+}
+
+.feature-card h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #ffffff; /* White heading color */
+}
+
+.feature-card p {
+    font-size: 0.95rem;
+    color: #e0e0e0; /* Light grey paragraph color */
+    max-width: 250px;
 }
