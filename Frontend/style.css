@@ -480,3 +480,72 @@ a {
     transform: translateY(-3px) scale(1.02); /* Lifts up and grows slightly */
     box-shadow: 0 6px 20px rgba(142, 45, 226, 0.5);
 }
+/* --- NEW: "View All Events" Button (in Events Section) --- */
+.view-all-container {
+    text-align: center;
+    margin-top: 3rem; /* Adds space above the button */
+}
+
+.btn-view-all {
+    background-color: #4a90e2;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-view-all .arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.btn-view-all:hover {
+    background-color: #3a7bc2;
+    box-shadow: 0 6px 16px rgba(74, 144, 226, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-view-all:hover .arrow {
+    transform: translateX(4px); /* Moves arrow on hover */
+}
+
+
+/* --- NEW: "Ready to Elevate" CTA SECTION --- */
+.cta {
+    /* Blue gradient from the image */
+    background: linear-gradient(90deg, #3a7bd5, #00d2ff); 
+    color: #ffffff;
+    padding: 5rem 2rem;
+    text-align: center;
+}
+
+.cta h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.cta p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.9; /* Makes it slightly softer */
+}
+
+.btn-cta-white {
+    background-color: #ffffff;
+    color: #3a7bd5; /* Blue text */
+    padding: 0.8rem 1.8rem;
+    font-size: 1rem;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.btn-cta-white:hover {
+    transform: scale(1.05) translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
