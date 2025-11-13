@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Calendars</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Global Styles --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212; /* Dark background */
+            color: #ffffff;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        /* --- Main Layout Container --- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* --- Section Header --- */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* --- Create Button --- */
+        .create-btn {
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .create-btn:hover {
+            background-color: #333;
+        }
+
+        .create-btn span {
+            font-size: 1.2rem;
+            line-height: 1; /* Aligns the "+" symbol */
+        }
+
+        /* --- Horizontal Divider --- */
+        .divider {
+            border: none;
+            height: 1px;
+            background-color: #2a2a2a; /* Dark grey line */
+            margin: 2.5rem 0;
+        }
+
+        /* --- Card Grid --- */
+        .card-grid {
+            display: grid;
+            /* This setup will show one card, but will wrap to multiple
+               columns if you add more .calendar-card elements. */
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* --- "No Calendar" Card --- */
+        .calendar-card {
+            background-color: #1e1e1e; /* Slightly lighter than background */
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            width: 220px; /* Fixed width to match the image */
+        }
+
+        .calendar-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .calendar-card p {
+            font-size: 0.9rem;
+            color: #aaa; /* Light grey for subtext */
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* --- CSS-Only Calendar Icon --- */
+        .card-icon {
+            position: relative;
+            width: 60px;
+            height: 50px;
+            background-color: #3a3a3a;
+            border-radius: 8px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* The "binder rings" at the top */
+        .card-icon::before,
+        .card-icon::after {
+            content: '';
+            position: absolute;
+            top: -6px; /* Position above the card */
+            width: 8px;
+            height: 12px;
+            background-color: #3a3a3a; /* Match icon body */
+            border-radius: 4px;
+        }
+
+        .card-icon::before {
+            left: 12px;
+        }
+
+        .card-icon::after {
+            right: 12px;
+        }
+
+        /* The "0" text inside the icon */
+        .card-icon span {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #999; /* Grey number */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <section class="calendar-section">
+            <header class="section-header">
+                <h2>My Calendars</h2>
+                <button class="create-btn">
+                    <span>+</span> Create
+                </button>
+            </header>
+            
+            <div class="card-grid">
+                <div class="calendar-card">
+                    <div class="card-icon">
+                        <span>0</span>
+                    </div>
+                    <h3>No Calendars</h3>
+                    <p>You are not an admin of any calendars.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider">
+
+        <section class="calendar-section">
+            <header class="section-header">
+                <h2>Subscribed Calendars</h2>
+            </header>
+            
+            <div class="card-grid">
+                <div class="calendar-card">
+                    <div class="card-icon">
+                        <span>0</span>
+                    </div>
+                    <h3>No Subscriptions</h3>
+                    <p>You have not subscribed to any calendars.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>
