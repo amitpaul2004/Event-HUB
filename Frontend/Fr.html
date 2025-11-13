@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Event Horizon — Event Page</title>
+<title>Event Horizon — Animated Event Page (Fixed)</title>
 
 <!-- Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -18,382 +18,451 @@
     --dark:#0f1724;
   }
 
+  *{box-sizing:border-box}
   body{
     margin:0;
-    font-family:Inter, Arial, sans-serif;
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     background:var(--bg);
     color:var(--dark);
     -webkit-font-smoothing:antialiased;
+    scroll-behavior:smooth;
+  }
+
+  /* === TOP SCROLL PROGRESS BAR === */
+  .scroll-progress {
+    position:fixed; left:0; right:0; top:0;
+    height:4px;
+    background:linear-gradient(90deg,var(--primary), #6ea1ff);
+    transform-origin: left center;
+    transform: scaleX(0);
+    z-index:9999;
+    transition: transform 120ms linear;
+    pointer-events:none;
   }
 
   /* Header */
   .header{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:14px 28px;
-    background:var(--bg);
+    display:flex; align-items:center; gap:12px;
+    padding:14px 28px; background:var(--bg);
     border-bottom:1px solid rgba(15,23,36,0.04);
+    position:sticky; top:0; z-index:900;
+    transform: translateY(-14px); opacity:0;
+    transition: transform 540ms cubic-bezier(.2,.9,.3,1), opacity 420ms ease;
+    backdrop-filter: blur(6px);
   }
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-weight:700;
-    font-size:20px;
-  }
-  .brand i{font-size:22px;color:var(--primary)}
+  .header.visible{ transform: translateY(0); opacity:1; }
+
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:700; font-size:20px; }
+  .brand i{ font-size:22px; color:var(--primary); transition: transform 220ms ease; }
+  .brand:hover i{ transform: rotate(-6deg) scale(1.05); }
 
   /* Hero */
   .hero{
-    height:70vh;
-    background-image:url('https://images.unsplash.com/photo-1543161685-6188e7a69c0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1600');
-    background-size:cover;
-    background-position:center;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    position:relative;
-    color:white;
+    height:70vh; min-height:360px;
+    background-image: url('https://images.unsplash.com/photo-1543161685-6188e7a69c0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1600');
+    background-size: cover; background-position: center;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; position:relative; color:white; overflow:hidden; perspective:1000px;
   }
-  .hero::after{
-    content:"";position:absolute;inset:0;
-    background:rgba(0,0,0,0.45);
+  .hero-bg {
+    position:absolute; inset:0;
+    background-image: inherit;
+    background-size: cover; background-position: center;
+    transform: translateZ(0);
+    will-change: transform;
+    transition: transform 300ms ease-out;
+    filter: saturate(0.95) contrast(0.95);
   }
-  .hero-inner{position:relative;z-index:2;padding:0 20px}
+  .hero::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(2,6,23,0.25), rgba(2,6,23,0.45)); z-index:1; }
+  .hero-inner{ position:relative; z-index:2; padding:0 24px; max-width:1100px; }
+
   .hero h1{
-    font-size:48px;
-    font-weight:800;
-    margin:0 0 10px;
+    font-size:48px; font-weight:800; margin:0 0 10px;
+    transform-origin:center; opacity:0; transform: translateY(8px) rotateX(8deg);
+    transition: transform 700ms cubic-bezier(.2,.9,.3,1), opacity 700ms ease;
+    will-change: transform, opacity; text-shadow: 0 6px 30px rgba(0,0,0,0.35);
   }
-  .hero p{font-size:20px;margin:0;font-weight:300}
+  .hero p{
+    font-size:20px; margin:0; font-weight:300; color: rgba(255,255,255,0.94);
+    opacity:0; transform: translateY(6px);
+    transition: transform 700ms 120ms cubic-bezier(.2,.9,.3,1), opacity 700ms 120ms ease;
+  }
+  @keyframes floaty { 0%{ transform: translateY(0) } 50%{ transform: translateY(-8px) } 100%{ transform: translateY(0) } }
+  .hero.show h1{ opacity:1; transform: translateY(0) rotateX(0); animation: floaty 6s ease-in-out infinite; }
+  .hero.show p{ opacity:1; transform: translateY(0); animation: floaty 5.6s ease-in-out infinite; }
 
   /* Layout */
-  .container{
-    max-width:1150px;
-    margin:40px auto 90px;
-    padding:0 20px;
-    display:grid;
-    grid-template-columns:1fr 340px;
-    gap:40px;
-  }
+  .container{ max-width:1150px; margin:36px auto 90px; padding:0 20px; display:grid; grid-template-columns:1fr 340px; gap:40px; align-items:start; }
 
-  /* About section (BIGGER FONT) */
-  .about h2{
-    font-size:32px;
-    font-weight:800;
-    margin-bottom:10px;
-  }
-  .about p{
-    font-size:18px;
-    line-height:1.75;
-    color:var(--muted);
-  }
+  /* About (reveal fixed) */
+  .about{ opacity:0; transform: translateY(8px); transition: transform 520ms ease, opacity 520ms ease; }
+  .about.visible{ opacity:1; transform: translateY(0); }
+  .about h2{ font-size:32px; font-weight:800; margin-bottom:10px; }
+  .about p{ font-size:18px; line-height:1.75; color:var(--muted); }
 
-  /* Schedule title */
-  .schedule-title{
-    font-size:32px;
-    font-weight:800;
-    margin:30px 0 18px;
-  }
+  /* Schedule title (reveal) */
+  .schedule-title{ font-size:32px; font-weight:800; margin:30px 0 18px; opacity:0; transform: translateY(8px); transition: transform 520ms 120ms ease, opacity 520ms 120ms ease; }
+  .schedule-title.visible{ opacity:1; transform: translateY(0); }
 
   /* Timeline */
-  .timeline{
-    position:relative;
-    padding-left:30px;
-  }
-  .timeline::before{
-    content:"";
-    position:absolute;
-    left:20px;
-    top:12px;
-    bottom:0;
-    width:2px;
-    background:rgba(47,107,255,0.17);
-  }
+  .timeline{ position:relative; padding-left:30px; }
+  .timeline::before{ content:""; position:absolute; left:20px; top:12px; bottom:0; width:2px; background:linear-gradient(180deg, rgba(47,107,255,0.25), rgba(47,107,255,0.05)); }
 
   .event{
-    position:relative;
-    padding:22px 20px 22px 36px;
+    position:relative; padding:22px 20px 22px 36px;
+    opacity:0; transform: translateX(-18px) rotateX(6deg); transform-origin:left center;
+    transition: transform 560ms cubic-bezier(.2,.9,.3,1), opacity 520ms ease;
   }
+  .event.visible{ opacity:1; transform: translateX(0) rotateX(0); }
+
   .event-marker{
-    position:absolute;
-    left:-2px;
-    top:28px;
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    background:var(--accent);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border:6px solid var(--bg);
+    position:absolute; left:-2px; top:28px; width:42px; height:42px; border-radius:50%;
+    background:var(--accent); display:flex; align-items:center; justify-content:center;
+    border:6px solid var(--bg); box-shadow:0 8px 24px rgba(15,23,36,0.06);
+    transition: transform 420ms ease, box-shadow 240ms ease;
   }
-  .event-marker i{
-    font-size:18px;
-    color:var(--primary);
-  }
+  .event.visible .event-marker{ transform: scale(1.05); box-shadow: 0 12px 34px rgba(47,107,255,0.12); }
+  .event-marker i{ font-size:18px; color:var(--primary); transition: transform 180ms ease; }
+  .event-marker:hover i{ transform: rotate(-12deg) scale(1.05); }
 
-  .event-time{
-    color:var(--primary);
-    font-size:17px;
-    font-weight:700;
-    margin-bottom:6px;
-  }
+  .event-time{ color:var(--primary); font-size:17px; font-weight:700; margin-bottom:6px; }
+  .event-title{ font-size:21px; font-weight:700; margin:0 0 6px; }
+  .event-speaker{ font-size:16px; color:var(--muted); margin:0 0 8px; }
+  .event-desc{ font-size:17px; color:var(--muted); line-height:1.6; margin:0; }
 
-  .event-title{
-    font-size:21px;
-    font-weight:700;
-    margin:0 0 6px;
-  }
+  /* Register Card */
+  .card{ background:var(--card); padding:22px; border-radius:12px; border:1px solid rgba(15,23,36,0.08); box-shadow:0 8px 30px rgba(0,0,0,0.06);
+         opacity:0; transform: translateY(10px) scale(0.995); transition: transform 480ms cubic-bezier(.2,.9,.3,1), opacity 420ms ease; }
+  .card.visible{ opacity:1; transform: translateY(0) scale(1); }
+  .card h3{ font-size:26px; font-weight:800; margin:0 0 14px; }
+  .card-row{ display:flex; align-items:flex-start; gap:14px; margin:14px 0; }
+  .card-row i{ font-size:20px; color:var(--primary); margin-top:2px; }
+  .meta-title{ font-size:18px; font-weight:700; }
+  .meta-sub{ font-size:15px; color:var(--muted); }
 
-  .event-speaker{
-    font-size:16px;
-    color:var(--muted);
-    margin:0 0 8px;
-  }
+  /* register btn */
+  @keyframes pulse { 0%{ box-shadow: 0 8px 22px rgba(47,107,255,0.12); transform: translateY(0) } 50%{ box-shadow: 0 18px 46px rgba(47,107,255,0.16); transform: translateY(-3px) } 100%{ box-shadow: 0 8px 22px rgba(47,107,255,0.12); transform: translateY(0) } }
+  .register-btn{ margin-top:18px; display:inline-flex; gap:10px; align-items:center; background:var(--primary); color:#fff; padding:14px 20px; font-size:17px; font-weight:700; text-decoration:none; border-radius:8px; border:0; transition: transform 160ms ease, box-shadow 160ms ease; }
+  .register-btn:hover{ animation: pulse 2.6s ease-in-out infinite; }
+  .register-btn:active{ transform: translateY(-1px); }
 
-  .event-desc{
-    font-size:17px;
-    color:var(--muted);
-    line-height:1.6;
-    margin:0;
-  }
+  /* Speakers */
+  .speakers-section{ grid-column: 1 / -1; margin-top:50px; opacity:0; transform: translateY(10px); transition: opacity 560ms ease, transform 560ms cubic-bezier(.2,.9,.3,1); }
+  .speakers-section.visible{ opacity:1; transform: translateY(0); }
 
-  /* Register Card (BIGGER FONT) */
-  .card{
-    background:var(--card);
-    padding:22px;
-    border-radius:12px;
-    border:1px solid rgba(15,23,36,0.08);
-    box-shadow:0 6px 20px rgba(0,0,0,0.06);
-  }
-  .card h3{
-    font-size:26px;
-    font-weight:800;
-    margin:0 0 14px;
-  }
+  .speakers-grid{ display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top:18px; }
 
-  .card-row{
-    display:flex;
-    align-items:flex-start;
-    gap:14px;
-    margin:14px 0;
+  .speaker-card{
+    background: #fff; padding: 22px; border-radius: 12px; border: 1px solid rgba(15,23,36,0.08);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    transform: translateY(18px) rotateX(6deg) scale(0.995); opacity:0;
+    transition: transform 560ms cubic-bezier(.2,.9,.3,1), opacity 520ms ease, box-shadow 220ms ease;
+    will-change: transform, opacity; transform-origin: center top;
   }
-  .card-row i{
-    font-size:20px;
-    color:var(--primary);
-    margin-top:2px;
-  }
+  .speaker-card.visible{ transform: translateY(0) rotateX(0) scale(1); opacity:1; }
+  .speaker-card:hover{ box-shadow: 0 20px 60px rgba(15,23,36,0.12); transform: translateY(-8px) rotateX(0) scale(1.02); }
 
-  .meta-title{
-    font-size:18px;
-    font-weight:700;
-  }
-  .meta-sub{
-    font-size:15px;
-    color:var(--muted);
-  }
+  .speaker-top{ display:flex; align-items:center; gap:15px; margin-bottom:10px; }
+  .speaker-top img{ width:70px; height:70px; border-radius:50%; object-fit:cover; transition: transform 360ms ease; }
+  .speaker-card:hover .speaker-top img{ transform: scale(1.06) rotate(-1deg); }
 
-  .register-btn{
-    margin-top:18px;
-    display:inline-flex;
-    gap:10px;
-    align-items:center;
-    background:var(--primary);
-    color:#fff;
-    padding:14px 20px;
-    font-size:17px;
-    font-weight:700;
-    text-decoration:none;
-    border-radius:8px;
+  .speaker-top h3{ margin:0; font-size:20px; font-weight:700; }
+  .speaker-top p{ margin:4px 0 0; color:var(--muted); font-size:14px; }
+  .speaker-bio{ font-size:15px; color:var(--muted); line-height:1.6; margin-top:10px; }
+
+  /* small utilities */
+  .icon-bounce:hover{ transform: translateY(-4px); transition: transform 220ms ease; }
+
+  /* prefers-reduced-motion fallback */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    .hero-bg { transition: none; transform: none !important; }
+    .hero.show h1, .hero.show p { animation: none; transform:none; opacity:1; }
+    .header{ transform:none; opacity:1; }
+    .event, .card, .speaker-card, .about, .schedule-title, .speakers-section { opacity:1; transform:none; }
+    .register-btn:hover { animation: none; }
   }
 
   /* Responsive */
-  @media(max-width:980px){
-    .container{
-      grid-template-columns:1fr;
-    }
-    .card{order:-1}
-  }
-  @media(max-width:520px){
-    .hero h1{font-size:34px}
-    .hero p{font-size:16px}
-  }
-
+  @media (max-width:980px){ .container{ grid-template-columns:1fr; } .card{ order:-1 } }
+  @media (max-width:520px){ .hero h1{font-size:34px} .hero p{font-size:16px} .brand{font-size:18px} }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="header">
-  <div class="brand">
-    <i class="bi bi-ticket-perforated-fill"></i>
-    Event Horizon
-  </div>
-</header>
+  <div class="scroll-progress" id="scrollProgress"></div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-inner">
-    <h1>Next.js Global Summit</h1>
-    <p>The future of web development is here. Join us for a deep dive into Next.js and Vercel.</p>
-  </div>
-</section>
+  <!-- HEADER -->
+  <header class="header" id="siteHeader">
+    <div class="brand">
+      <i class="bi bi-ticket-perforated-fill icon-bounce"></i>
+      Event Horizon
+    </div>
+  </header>
 
-<!-- CONTENT -->
-<main class="container">
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+    <div class="hero-inner" id="heroInner">
+      <h1 id="heroTitle">Next.js Global Summit</h1>
+      <p id="heroSub">The future of web development is here. Join us for a deep dive into Next.js and Vercel.</p>
+    </div>
+  </section>
 
-  <!-- LEFT SIDE -->
-  <div>
-    <section class="about">
-      <h2>About the Event</h2>
-      <p>
-        A full day of talks from the creators of Next.js and the community.
-        Learn about the latest features, best practices, and the future of the framework.
-        Sessions cover everything from server components to advanced routing patterns.
-      </p>
+  <!-- CONTENT -->
+  <main class="container">
+
+    <!-- LEFT -->
+    <div>
+      <section class="about" id="about">
+        <h2>About the Event</h2>
+        <p>A full day of talks from the creators of Next.js and the community. Learn about the latest features, best practices, and the future of the framework. Sessions cover everything from server components to advanced routing patterns.</p>
+      </section>
+
+      <div class="schedule-title" id="scheduleTitle">Schedule</div>
+
+      <div class="timeline" id="timeline">
+        <div class="event">
+          <div class="event-marker"><i class="bi bi-clock"></i></div>
+          <div class="event-time">09:00 AM</div>
+          <div class="event-title">Keynote: The Future of the Web</div>
+          <div class="event-speaker">By Jane Doe</div>
+          <div class="event-desc">An opening talk about the direction of web development and Next.js.</div>
+        </div>
+
+        <div class="event">
+          <div class="event-marker"><i class="bi bi-clock"></i></div>
+          <div class="event-time">10:00 AM</div>
+          <div class="event-title">Mastering Server Components</div>
+          <div class="event-speaker">By John Smith</div>
+          <div class="event-desc">A deep dive into React Server Components and their use in Next.js.</div>
+        </div>
+
+        <div class="event">
+          <div class="event-marker"><i class="bi bi-clock"></i></div>
+          <div class="event-time">11:00 AM</div>
+          <div class="event-title">Coffee Break</div>
+          <div class="event-desc">Networking and coffee.</div>
+        </div>
+
+        <div class="event">
+          <div class="event-marker"><i class="bi bi-clock"></i></div>
+          <div class="event-time">11:30 AM</div>
+          <div class="event-title">Panel: The State of Jamstack</div>
+          <div class="event-desc">A discussion with industry experts.</div>
+        </div>
+
+        <div class="event">
+          <div class="event-marker"><i class="bi bi-clock"></i></div>
+          <div class="event-time">12:30 PM</div>
+          <div class="event-title">Lunch Break</div>
+          <div class="event-desc">Enjoy a provided lunch.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <aside>
+      <div class="card" id="registerCard">
+        <h3>Register Now</h3>
+
+        <div class="card-row">
+          <i class="bi bi-calendar-event"></i>
+          <div>
+            <div class="meta-title">October 26, 2024</div>
+            <div class="meta-sub">Event Date</div>
+          </div>
+        </div>
+
+        <div class="card-row">
+          <i class="bi bi-geo-alt"></i>
+          <div>
+            <div class="meta-title">Virtual</div>
+            <div class="meta-sub">Venue</div>
+          </div>
+        </div>
+
+        <button class="register-btn" id="registerBtn" aria-label="Register for this event">
+          <i class="bi bi-ticket-perforated-fill"></i>
+          Register for this event
+        </button>
+      </div>
+    </aside>
+
+    <!-- Speakers -->
+    <section class="speakers-section" id="speakersSection">
+      <h2 style="font-size:32px; font-weight:800; margin:0 0 10px;">Speakers</h2>
+      <div class="speakers-grid" id="speakersGrid">
+        <div class="speaker-card">
+          <div class="speaker-top">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=160&q=80" alt="Jane Doe">
+            <div>
+              <h3>Jane Doe</h3>
+              <p>Lead Engineer, Vercel</p>
+            </div>
+          </div>
+          <p class="speaker-bio">Jane is a lead engineer at Vercel, focusing on the Next.js framework. She is passionate about open-source and building performant web experiences.</p>
+        </div>
+
+        <div class="speaker-card">
+          <div class="speaker-top">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=160&q=80" alt="John Smith">
+            <div>
+              <h3>John Smith</h3>
+              <p>Developer Advocate, Google</p>
+            </div>
+          </div>
+          <p class="speaker-bio">John is a developer advocate at Google, specializing in web performance and Core Web Vitals. He loves helping developers build faster websites.</p>
+        </div>
+      </div>
     </section>
 
-    <div class="schedule-title">Schedule</div>
+  </main>
 
-    <div class="timeline">
+<script>
+  // Respect prefers-reduced-motion
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      <div class="event">
-        <div class="event-marker"><i class="bi bi-clock"></i></div>
-        <div class="event-time">09:00 AM</div>
-        <div class="event-title">Keynote: The Future of the Web</div>
-        <div class="event-speaker">By Jane Doe</div>
-        <div class="event-desc">An opening talk about the direction of web development and Next.js.</div>
-      </div>
+  // Header & hero entrance
+  window.addEventListener('load', () => {
+    const header = document.getElementById('siteHeader');
+    if (!reduced) setTimeout(()=> header.classList.add('visible'), 120); else header.classList.add('visible');
 
-      <div class="event">
-        <div class="event-marker"><i class="bi bi-clock"></i></div>
-        <div class="event-time">10:00 AM</div>
-        <div class="event-title">Mastering Server Components</div>
-        <div class="event-speaker">By John Smith</div>
-        <div class="event-desc">A deep dive into React Server Components and their use in Next.js.</div>
-      </div>
+    const hero = document.getElementById('hero');
+    if (!reduced) setTimeout(()=> hero.classList.add('show'), 160); else hero.classList.add('show');
+  });
 
-      <div class="event">
-        <div class="event-marker"><i class="bi bi-clock"></i></div>
-        <div class="event-time">11:00 AM</div>
-        <div class="event-title">Coffee Break</div>
-        <div class="event-desc">Networking and coffee.</div>
-      </div>
+  // Scroll progress bar
+  const progress = document.getElementById('scrollProgress');
+  const updateProgress = () => {
+    const h = document.documentElement;
+    const scrollTop = h.scrollTop || document.body.scrollTop;
+    const docHeight = h.scrollHeight - h.clientHeight;
+    const pct = docHeight ? (scrollTop / docHeight) : 0;
+    progress.style.transform = `scaleX(${pct})`;
+  };
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
 
-      <div class="event">
-        <div class="event-marker"><i class="bi bi-clock"></i></div>
-        <div class="event-time">11:30 AM</div>
-        <div class="event-title">Panel: The State of Jamstack</div>
-        <div class="event-desc">A discussion with industry experts.</div>
-      </div>
+  // Hero parallax on mouse move
+  const heroBg = document.getElementById('heroBg');
+  const heroEl = document.getElementById('hero');
+  if (!reduced && heroEl && heroBg) {
+    heroEl.addEventListener('mousemove', (e) => {
+      const r = heroEl.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      const tx = px * 14; const ty = py * 10;
+      heroBg.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(1.02)`;
+    });
+    heroEl.addEventListener('mouseleave', () => heroBg.style.transform = 'translate3d(0,0,0) scale(1)');
+  }
 
-      <div class="event">
-        <div class="event-marker"><i class="bi bi-clock"></i></div>
-        <div class="event-time">12:30 PM</div>
-        <div class="event-title">Lunch Break</div>
-        <div class="event-desc">Enjoy a provided lunch.</div>
-      </div>
+  // IntersectionObserver for reveals
+  const obsOptions = { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.12 };
+  const revealObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, obsOptions);
 
-    </div>
-  </div>
+  // Observe elements: about (whole), schedule title, register card, speakers section
+  const aboutEl = document.getElementById('about');
+  if (aboutEl) revealObserver.observe(aboutEl);
+  const st = document.getElementById('scheduleTitle'); if (st) revealObserver.observe(st);
+  const reg = document.getElementById('registerCard'); if (reg) revealObserver.observe(reg);
+  const sp = document.getElementById('speakersSection'); if (sp) revealObserver.observe(sp);
 
-  <!-- RIGHT SIDE (REGISTER CARD) -->
-  <aside>
-    <div class="card">
-      <h3>Register Now</h3>
+  // Stagger timeline events
+  const timelineContainer = document.getElementById('timeline');
+  if (timelineContainer) {
+    const events = timelineContainer.querySelectorAll('.event');
+    const tlObs = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          events.forEach((ev, i) => setTimeout(()=> ev.classList.add('visible'), i * 120));
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {...obsOptions, threshold:0.06});
+    tlObs.observe(timelineContainer);
+  }
 
-      <div class="card-row">
-        <i class="bi bi-calendar-event"></i>
-        <div>
-          <div class="meta-title">October 26, 2024</div>
-          <div class="meta-sub">Event Date</div>
-        </div>
-      </div>
+  // Stagger speakers
+  if (sp) {
+    const cards = document.querySelectorAll('.speaker-card');
+    const spObs = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          cards.forEach((c, i) => setTimeout(()=> c.classList.add('visible'), i * 140));
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {...obsOptions, threshold: 0.12});
+    spObs.observe(sp);
+  }
 
-      <div class="card-row">
-        <i class="bi bi-geo-alt"></i>
-        <div>
-          <div class="meta-title">Virtual</div>
-          <div class="meta-sub">Venue</div>
-        </div>
-      </div>
+  // Speaker card tilt on mouse move
+  document.querySelectorAll('.speaker-card').forEach(card => {
+    if (reduced) return;
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      const tiltX = (py * 7).toFixed(2);
+      const tiltY = (-px * 7).toFixed(2);
+      card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(0)`;
+      card.style.transition = 'transform 120ms ease';
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      card.style.transition = 'transform 260ms cubic-bezier(.2,.9,.3,1)';
+    });
+  });
 
-      <a href="#" class="register-btn">
-        <i class="bi bi-ticket-perforated-fill"></i>
-        Register for this event
-      </a>
-    </div>
+  // Register button ripple
+  const registerBtn = document.getElementById('registerBtn');
+  if (registerBtn) {
+    registerBtn.addEventListener('click', (e) => {
+      const rect = registerBtn.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      const size = Math.max(rect.width, rect.height) * 1.6;
+      ripple.style.position = 'absolute';
+      ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+      ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+      ripple.style.width = ripple.style.height = `${size}px`;
+      ripple.style.borderRadius = '50%';
+      ripple.style.background = 'rgba(255,255,255,0.12)';
+      ripple.style.pointerEvents = 'none';
+      ripple.style.transform = 'scale(0)';
+      ripple.style.opacity = '0.9';
+      ripple.style.transition = 'transform 560ms cubic-bezier(.2,.9,.3,1), opacity 560ms ease';
+      registerBtn.appendChild(ripple);
+      requestAnimationFrame(()=> {
+        ripple.style.transform = 'scale(1)';
+        ripple.style.opacity = '0';
+      });
+      setTimeout(()=> ripple.remove(), 700);
+    });
+  }
 
-    <!-- SPEAKERS SECTION -->
-<section style="grid-column: 1 / -1; margin-top: 50px;">
-  <h2 style="font-size:32px; font-weight:800; margin-bottom:20px;">Speakers</h2>
+  // Marker hover bounce
+  document.addEventListener('mouseover', (e) => {
+    const m = e.target.closest('.event-marker');
+    if (m && !reduced) {
+      m.animate([{ transform:'scale(1)' }, { transform:'scale(1.08)' }, { transform:'scale(1)' }], { duration: 420, easing: 'ease-out' });
+    }
+  });
 
-  <div style="
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-  ">
-
-    <!-- Speaker 1 -->
-    <div style="
-      background: #fff;
-      padding: 22px;
-      border-radius: 12px;
-      border: 1px solid rgba(15,23,36,0.08);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-    ">
-      <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
-        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=80&q=80"
-             style="width:70px; height:70px; border-radius:50%; object-fit:cover;">
-        <div>
-          <h3 style="margin:0; font-size:20px; font-weight:700;">Jane Doe</h3>
-          <p style="margin:4px 0 0; font-size:14px; color:#6b7280;">
-            Lead Engineer, Vercel
-          </p>
-        </div>
-      </div>
-
-      <p style="font-size:15px; color:#6b7280; line-height:1.6;">
-        Jane is a lead engineer at Vercel, focusing on the Next.js framework.
-        She is passionate about open-source and building performant web experiences.
-      </p>
-    </div>
-
-
-    <!-- Speaker 2 -->
-    <div style="
-      background: #fff;
-      padding: 22px;
-      border-radius: 12px;
-      border: 1px solid rgba(15,23,36,0.08);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-    ">
-      <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
-        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=80&q=80"
-             style="width:70px; height:70px; border-radius:50%; object-fit:cover;">
-        <div>
-          <h3 style="margin:0; font-size:20px; font-weight:700;">John Smith</h3>
-          <p style="margin:4px 0 0; font-size:14px; color:#6b7280;">
-            Developer Advocate, Google
-          </p>
-        </div>
-      </div>
-
-      <p style="font-size:15px; color:#6b7280; line-height:1.6;">
-        John is a developer advocate at Google, specializing in web performance
-        and Core Web Vitals. He loves helping developers build faster websites.
-      </p>
-    </div>
-
-  </div>
-</section>
-
-  </aside>
-
-</main>
-
+  // If reduced motion, reveal everything immediately
+  if (reduced) {
+    document.querySelectorAll('.event, .card, .speaker-card, .about, .schedule-title, .speakers-section').forEach(n => n.classList.add('visible'));
+    const hero = document.getElementById('hero'); if (hero) hero.classList.add('show');
+    document.getElementById('siteHeader').classList.add('visible');
+  }
+</script>
 </body>
 </html>
