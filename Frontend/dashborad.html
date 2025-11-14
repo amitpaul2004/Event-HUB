@@ -46,128 +46,138 @@
     .sidebar, .header, .card{transition:all 0.36s ease}
     @media (max-width:900px){.sidebar{display:none}.main{margin-left:0;padding:18px}}
 
-    /* ========= OVERLAY ========= */
+    /* --- Overlay --- */
 .att-overlay {
   display:none;
   position:fixed;
   inset:0;
-  backdrop-filter:blur(12px);
   background:rgba(0,0,0,0.45);
-  z-index:999;
-  align-items:center;
-  justify-content:center;
-}
-
-/* ========= PANEL (SLIDE IN) ========= */
-.att-panel {
-  width:900px;
-  max-width:92%;
-  background:rgba(255,255,255,0.35);
-  backdrop-filter:blur(18px);
-  border-radius:18px;
-  padding:28px;
-  border:1px solid rgba(255,255,255,0.3);
-  transform:translateY(80px);
+  backdrop-filter:blur(6px);
+  z-index:900;
   opacity:0;
-  transition:all .45s cubic-bezier(.18,.75,.35,1.2);
+  transition:opacity 0.35s ease;
 }
 
-/* ========= DARK MODE ========= */
-@media (prefers-color-scheme: dark) {
-  .att-panel {
-    background:rgba(20,20,25,0.45);
-    color:white;
-    border-color:rgba(255,255,255,0.15);
-  }
-  .att-table th, .att-table td { color:#dfe4ee; }
+/* --- Slide-In Panel --- */
+.att-panel {
+  width:500px;
+  height:70vh;
+  right:-550px;
+  bottom:40px;
+  position:fixed;
+  z-index:1000;
+
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(12px);
+  border-radius:14px;
+  box-shadow:0 25px 60px rgba(0,0,0,0.35);
+  border:1px solid #d7e3f7;
+
+  padding:26px;
+  overflow-y:auto;
+  transition:right 0.45s cubic-bezier(.25,.8,.25,1);
 }
 
-/* ========= HEADER ========= */
+/* Dark mode */
+.dark .att-panel {
+  background:rgba(20,22,35,0.85);
+  border-color:#444a66;
+  color:white;
+}
+
+/* Header */
 .att-header {
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
 }
-.close-btn {
-  font-size:28px;
-  background:none;
-  border:none;
-  color:rgb(230,230,240);
-  cursor:pointer;
+.att-header h2 {
+  margin:0;
+  font-size:22px;
+  font-weight:800;
+}
+.att-sub {
+  margin-top:4px;
+  font-size:13px;
+  color:#678;
 }
 
-/* ========= CARD ========= */
-.att-card {
-  background:rgba(255,255,255,0.45);
-  backdrop-filter:blur(12px);
-  padding:18px;
-  border-radius:14px;
+/* Box */
+.att-box {
   margin-top:20px;
+  background:#fff;
+  border:1px solid #dce4f5;
+  padding:16px;
+  border-radius:12px;
 }
-.att-card-top {
+.dark .att-box {
+  background:#1f2234;
+  border-color:#3a3f57;
+}
+
+/* Header inside box */
+.att-box-top {
   display:flex;
   justify-content:space-between;
   align-items:center;
 }
 
-.att-small {
-  color:#445; 
-  margin-top:4px;
+.att-count {
   font-size:13px;
+  color:#667;
 }
 
-/* ========= TABLE ========= */
+/* Table */
 .att-table {
   width:100%;
   border-collapse:collapse;
   margin-top:12px;
 }
 .att-table th {
-  padding:8px;
-  color:#4f6b9f; 
   text-align:left;
+  padding:8px;
+  color:#567;
 }
 .att-table td {
-  padding:10px;
-  color:#1e2d3e;
+  padding:8px;
+  border-bottom:1px solid #e3e9f7;
+}
+.dark .att-table td {
+  border-color:#3a4058;
 }
 
-/* ========= RECOMMENDATIONS BUTTON ========= */
+/* Close button */
+.att-close-btn {
+  background:none;
+  border:0;
+  cursor:pointer;
+  font-size:26px;
+  color:#455;
+}
+
+/* Recommendation Button */
 .rec-btn {
   background:#2563eb;
   color:white;
   padding:10px 16px;
-  border-radius:10px;
-  border:none;
-  display:flex;
-  align-items:center;
-  gap:10px;
+  border-radius:8px;
+  border:0;
+  font-weight:700;
   cursor:pointer;
-  font-weight:600;
-  position:relative;
-  overflow:hidden;
+  transition:0.2s;
+}
+.rec-btn.loading {
+  opacity:0.7;
 }
 
-.rec-spinner {
-  width:18px;
-  height:18px;
-  border:3px solid rgba(255,255,255,0.25);
-  border-top-color:white;
-  border-radius:50%;
+/* Recommendation box */
+.rec-results {
+  margin-top:16px;
   display:none;
-  animation:spin 0.8s linear infinite;
-}
-
-@keyframes spin { to { transform:rotate(360deg); } }
-
-/* ========= RECOMMENDATION BOX ========= */
-.rec-box {
-  display:none;
-  background:white;
-  padding:16px;
-  border-radius:12px;
-  margin-top:18px;
-  border:1px solid #d4e1f7;
+  background:#fff;
+  border-radius:10px;
+  padding:12px;
+  border:1px solid #dde4f5;
 }
 
   </style>
@@ -244,42 +254,52 @@
     </div>
   </div>
   
-  <!-- Attendees Slide-in Modal -->
-<div id="attModal" class="att-overlay">
-  <div id="attPanel" class="att-panel">
-    
-    <div class="att-header">
+  <!-- Attendees Slide-In Panel -->
+<div id="attOverlay"
+     class="att-overlay">
+</div>
+
+<div id="attPanel"
+     class="att-panel">
+
+  <!-- Header -->
+  <div class="att-header">
+    <div>
+      <h2 id="attEventTitle">Attendees</h2>
+      <p class="att-sub">Track participation & engagement analytics.</p>
+    </div>
+    <button class="att-close-btn" onclick="closeAttPanel()">✕</button>
+  </div>
+
+  <!-- Attendee Info -->
+  <div class="att-box">
+    <div class="att-box-top">
       <div>
-        <h2 id="attTitle"></h2>
-        <p>Track participation and get AI-powered recommendations.</p>
-      </div>
-      <button id="closeAtt" class="close-btn">✕</button>
-    </div>
-
-    <div class="att-card">
-      <div class="att-card-top">
-        <div>
-          <h3>Attendee List</h3>
-          <p id="attCount" class="att-small"></p>
-        </div>
-
-        <button id="recBtn" class="rec-btn">
-          <span class="rec-label">⭐ Get Recommendations</span>
-          <span class="rec-spinner"></span>
-        </button>
+        <h3>Attendee List</h3>
+        <p id="attCount" class="att-count"></p>
       </div>
 
-      <table class="att-table">
-        <thead>
-          <tr>
-            <th>Name</th><th>Email</th><th>Company</th><th>Engagement</th>
-          </tr>
-        </thead>
-        <tbody id="attTableBody"></tbody>
-      </table>
-
-      <div id="recBox" class="rec-box"></div>
+      <button id="recBtn" class="rec-btn"
+              onclick="generateRecommendations()">
+        ⭐ Get Recommendations
+      </button>
     </div>
+
+    <!-- Table -->
+    <table class="att-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Company</th>
+          <th>Engagement</th>
+        </tr>
+      </thead>
+      <tbody id="attTableBody"></tbody>
+    </table>
+
+    <!-- Recommendation results -->
+    <div id="recResults" class="rec-results"></div>
 
   </div>
 </div>
@@ -307,7 +327,10 @@ function renderRows(){
       <td><span class="count">${ev.attendees}</span></td>
       <td>
         <div class="actions">
-          <button class="btn" onclick="openAttendees(INDEX)">👥 View Attendees</button>
+          <button class="btn" onclick="openAttendees('Next.js Global Summit')">
+  👥 View Attendees
+</button>
+
           <button class="btn secondary" data-idx="${idx}" data-action="edit">✏️ Edit</button>
         </div>
       </td>
@@ -433,95 +456,87 @@ createModal.addEventListener('click', (e)=>{
 });
 document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeCreateModal(); });
 
-// LOAD FROM DATABASE / API
+/* Example API Fetch (replace URL with your backend) */
 async function loadAttendeesFromDB(eventName) {
-  const response = await fetch(`/api/attendees?event=${encodeURIComponent(eventName)}`);
-  return await response.json();
+  const res = await fetch(`/api/attendees?event=${encodeURIComponent(eventName)}`);
+  return res.json();
 }
 
-// OPEN POPUP (SLIDE IN)
+/* OPEN PANEL */
 async function openAttendees(eventName) {
-  const modal = document.getElementById("attModal");
-  const panel = document.getElementById("attPanel");
-  
-  modal.style.display = "flex";
-
-  // Load attendees via API
+  // Load attendees from database
   const attendees = await loadAttendeesFromDB(eventName);
 
-  // Insert Title
-  document.getElementById("attTitle").textContent =
+  // Insert title
+  document.getElementById("attEventTitle").textContent =
     `Attendees for ${eventName}`;
 
   // Insert count
   document.getElementById("attCount").textContent =
-    `${attendees.length} people have registered for this event.`;
+    `${attendees.length} registered`;
 
-  // Insert attendee rows
-  const body = document.getElementById("attTableBody");
-  body.innerHTML = "";
+  // Fill table
+  const tbody = document.getElementById("attTableBody");
+  tbody.innerHTML = "";
 
   attendees.forEach(a => {
-    body.innerHTML += `
+    tbody.innerHTML += `
       <tr>
-        <td style="font-weight:600">${a.name}</td>
+        <td><b>${a.name}</b></td>
         <td>${a.email}</td>
         <td>${a.company}</td>
         <td>${a.minutes}min • ${a.questions} Qs • ${a.rating} ⭐</td>
-      </tr>
-    `;
+      </tr>`;
   });
 
-  // SLIDE-IN animation
+  // Show overlay + panel
+  document.getElementById("attOverlay").style.display = "block";
   setTimeout(() => {
-    panel.style.opacity = "1";
-    panel.style.transform = "translateY(0)";
-  }, 20);
-}
+    document.getElementById("attOverlay").style.opacity = "1";
+  }, 10);
 
-// CLOSE POPUP
-function closeAttendees() {
-  const modal = document.getElementById("attModal");
   const panel = document.getElementById("attPanel");
-  
-  panel.style.opacity = "0";
-  panel.style.transform = "translateY(80px)";
-  
-  setTimeout(() => modal.style.display = "none", 350);
+  panel.style.right = "40px";  // Slide in
 }
 
-document.getElementById("closeAtt").onclick = closeAttendees;
+/* CLOSE PANEL */
+function closeAttPanel() {
+  const panel = document.getElementById("attPanel");
+  panel.style.right = "-550px";
 
+  const overlay = document.getElementById("attOverlay");
+  overlay.style.opacity = "0";
 
-// ⭐ GET RECOMMENDATIONS
-async function showRecommendations() {
+  setTimeout(() => (overlay.style.display = "none"), 350);
+}
+
+/* ⭐ Recommendations Button */
+async function generateRecommendations() {
   const btn = document.getElementById("recBtn");
-  const label = document.querySelector(".rec-label");
-  const spinner = document.querySelector(".rec-spinner");
-  const box = document.getElementById("recBox");
+  const results = document.getElementById("recResults");
 
-  label.textContent = "Thinking...";
-  spinner.style.display = "inline-block";
-  btn.disabled = true;
+  btn.classList.add("loading");
+  btn.innerHTML = `<span class="spinner"></span> Thinking...`;
 
-  // simulate AI wait time
-  await new Promise(r => setTimeout(r, 1500));
+  await new Promise(r => setTimeout(r, 1200)); // AI delay effect
 
-  // Example: AI recommendations
-  box.style.display = "block";
-  box.innerHTML = `
-    <h4>AI Recommendations</h4>
-    <ul style="margin-left:20px; line-height:1.6;">
-      <li>Send personalized follow-ups to top performers.</li>
-      <li>Encourage low-engagement attendees to network more.</li>
-      <li>Offer session recording to attendees with fewer questions.</li>
+  btn.classList.remove("loading");
+  btn.textContent = "⭐ Get Recommendations";
+
+  results.style.display = "block";
+  results.innerHTML = `
+    <strong>Recommendations:</strong>
+    <ul style="margin-top:8px; color:#234;">
+      <li>Send follow-up emails to high-engagement attendees.</li>
+      <li>Offer a networking session to low-engagement users.</li>
+      <li>Share event recordings with inactive participants.</li>
     </ul>
   `;
-
-  label.textContent = "⭐ Get Recommendations";
-  spinner.style.display = "none";
-  btn.disabled = false;
 }
+
+/* Close on overlay click */
+document.getElementById("attOverlay").onclick = closeAttPanel;
+
 
 </script>
 </body>
