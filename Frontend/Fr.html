@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Event Horizon — Animated Event Page (Fixed)</title>
+<title>Event Horizon — Animated Event Page</title>
 
 <!-- Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -94,13 +94,13 @@
   /* Layout */
   .container{ max-width:1150px; margin:36px auto 90px; padding:0 20px; display:grid; grid-template-columns:1fr 340px; gap:40px; align-items:start; }
 
-  /* About (reveal fixed) */
+  /* About */
   .about{ opacity:0; transform: translateY(8px); transition: transform 520ms ease, opacity 520ms ease; }
   .about.visible{ opacity:1; transform: translateY(0); }
   .about h2{ font-size:32px; font-weight:800; margin-bottom:10px; }
   .about p{ font-size:18px; line-height:1.75; color:var(--muted); }
 
-  /* Schedule title (reveal) */
+  /* Schedule title */
   .schedule-title{ font-size:32px; font-weight:800; margin:30px 0 18px; opacity:0; transform: translateY(8px); transition: transform 520ms 120ms ease, opacity 520ms 120ms ease; }
   .schedule-title.visible{ opacity:1; transform: translateY(0); }
 
@@ -131,8 +131,13 @@
   .event-desc{ font-size:17px; color:var(--muted); line-height:1.6; margin:0; }
 
   /* Register Card */
-  .card{ background:var(--card); padding:22px; border-radius:12px; border:1px solid rgba(15,23,36,0.08); box-shadow:0 8px 30px rgba(0,0,0,0.06);
-         opacity:0; transform: translateY(10px) scale(0.995); transition: transform 480ms cubic-bezier(.2,.9,.3,1), opacity 420ms ease; }
+  .card{
+    background:var(--card); padding:22px; border-radius:12px;
+    border:1px solid rgba(15,23,36,0.08);
+    box-shadow:0 8px 30px rgba(0,0,0,0.06);
+    opacity:0; transform: translateY(10px) scale(0.995);
+    transition: transform 480ms cubic-bezier(.2,.9,.3,1), opacity 420ms ease;
+  }
   .card.visible{ opacity:1; transform: translateY(0) scale(1); }
   .card h3{ font-size:26px; font-weight:800; margin:0 0 14px; }
   .card-row{ display:flex; align-items:flex-start; gap:14px; margin:14px 0; }
@@ -140,9 +145,14 @@
   .meta-title{ font-size:18px; font-weight:700; }
   .meta-sub{ font-size:15px; color:var(--muted); }
 
-  /* register btn */
   @keyframes pulse { 0%{ box-shadow: 0 8px 22px rgba(47,107,255,0.12); transform: translateY(0) } 50%{ box-shadow: 0 18px 46px rgba(47,107,255,0.16); transform: translateY(-3px) } 100%{ box-shadow: 0 8px 22px rgba(47,107,255,0.12); transform: translateY(0) } }
-  .register-btn{ margin-top:18px; display:inline-flex; gap:10px; align-items:center; background:var(--primary); color:#fff; padding:14px 20px; font-size:17px; font-weight:700; text-decoration:none; border-radius:8px; border:0; transition: transform 160ms ease, box-shadow 160ms ease; }
+  .register-btn{
+    margin-top:18px; display:inline-flex; gap:10px; align-items:center;
+    background:var(--primary); color:#fff; padding:14px 20px;
+    font-size:17px; font-weight:700; text-decoration:none;
+    border-radius:8px; border:0; cursor:pointer;
+    position:relative; overflow:hidden;
+  }
   .register-btn:hover{ animation: pulse 2.6s ease-in-out infinite; }
   .register-btn:active{ transform: translateY(-1px); }
 
@@ -170,24 +180,10 @@
   .speaker-top p{ margin:4px 0 0; color:var(--muted); font-size:14px; }
   .speaker-bio{ font-size:15px; color:var(--muted); line-height:1.6; margin-top:10px; }
 
-  /* small utilities */
   .icon-bounce:hover{ transform: translateY(-4px); transition: transform 220ms ease; }
 
-  /* prefers-reduced-motion fallback */
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-    .hero-bg { transition: none; transform: none !important; }
-    .hero.show h1, .hero.show p { animation: none; transform:none; opacity:1; }
-    .header{ transform:none; opacity:1; }
-    .event, .card, .speaker-card, .about, .schedule-title, .speakers-section { opacity:1; transform:none; }
-    .register-btn:hover { animation: none; }
-  }
-
-  /* Responsive */
-  @media (max-width:980px){ .container{ grid-template-columns:1fr; } .card{ order:-1 } }
-  @media (max-width:520px){ .hero h1{font-size:34px} .hero p{font-size:16px} .brand{font-size:18px} }
-
-    :root{
+  /* SECOND :root FOR MODAL THEME (OK, OVERRIDES SOME VARS) */
+  :root{
     --bg:#f4f7fb;
     --card:#ffffff;
     --muted:#6b7280;
@@ -195,6 +191,7 @@
     --radius:14px;
     --shadow: 0 18px 50px rgba(4,12,30,0.15);
   }
+
   /* backdrop */
   .modal-backdrop {
     position: fixed; inset: 0; display:flex; align-items:center; justify-content:center;
@@ -213,7 +210,6 @@
   }
   .modal.show { transform: translateY(0) scale(1); opacity: 1; }
 
-  /* close */
   .modal-close {
     position: absolute; right: 14px; top: 12px;
     background: transparent; border: none; font-size: 20px; cursor: pointer; color: #444;
@@ -221,10 +217,10 @@
 
   .modal-title { margin:0 0 14px; font-size:20px; font-weight:800; color:#0f1724; }
 
-  /* form rows */
   .row { display:flex; gap:14px; margin-bottom:12px; }
   .row label { flex:1; display:block; font-size:13px; color:#0f1724; font-weight:600; }
   .lbl { display:block; margin-bottom:6px; font-weight:700; font-size:13px; color:#0f1724; }
+
   input[type="text"], input[type="email"], input[type="tel"], select {
     width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(15,23,36,0.08);
     font-size:15px; outline:none; transition: box-shadow 160ms ease, border-color 160ms ease;
@@ -232,16 +228,13 @@
   }
   input:focus, select:focus { box-shadow: 0 6px 18px rgba(47,107,255,0.08); border-color: rgba(47,107,255,0.32); }
 
-  /* actions */
   .actions { display:flex; justify-content:flex-end; gap:10px; margin-top:6px; }
   .btn-ghost{ background:#f3f5f8; border:0; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:700; color:#111; }
   .btn-primary{ background:var(--primary); border:0; color:white; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:800; display:inline-flex; align-items:center; gap:10px; }
 
-  /* submit spinner (small) */
-  .btn-spinner { width:14px; height:14px; border-radius:50%; border:2px solid rgba(255,255,255,0.3); border-top-color:white; display:inline-block; animation: spin 900ms linear infinite; margin-left:6px; }
+  .btn-spinner { width:14px; height:14px; border-radius:50%; border:2px solid rgba(255,255,255,0.3); border-top-color:white; display:none; animation: spin 900ms linear infinite; margin-left:6px; }
   @keyframes spin { to { transform: rotate(360deg);} }
 
-  /* success panel */
   .success-panel { text-align:center; padding:18px 6px; }
   .checkmark { width:88px; height:88px; display:block; margin:8px auto 6px; }
   .check { stroke-dasharray: 60; stroke-dashoffset: 60; transition: stroke-dashoffset 520ms cubic-bezier(.2,.9,.3,1); }
@@ -249,335 +242,274 @@
   .success-text { font-weight:800; font-size:18px; margin-top:6px; color:#0f1724; }
   .success-sub { color:var(--muted); font-size:13px; margin-top:6px; }
 
-  /* confetti canvas */
   .confetti-canvas { position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; }
 
-  /* error outlines */
   .field-error { border-color: #d14343 !important; box-shadow: 0 6px 18px rgba(209,67,67,0.06); }
 
-  /* responsive */
+  @media (max-width:980px){ .container{ grid-template-columns:1fr; } .card{ order:-1 } }
+  @media (max-width:520px){ .hero h1{font-size:34px} .hero p{font-size:16px} .brand{font-size:18px} }
+
   @media (max-width:720px) {
     .row { flex-direction:column; }
     .modal { padding:16px; border-radius:12px; }
     .checkmark { width:72px; height:72px; }
   }
 
-  /* reduced motion */
   @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    .hero-bg { transition: none; transform: none !important; }
+    .hero.show h1, .hero.show p { animation: none; transform:none; opacity:1; }
+    .header{ transform:none; opacity:1; }
+    .event, .card, .speaker-card, .about, .schedule-title, .speakers-section { opacity:1; transform:none; }
+    .register-btn:hover { animation: none; }
     .modal, .modal.show, .check, .btn-spinner { transition: none !important; animation: none !important; }
   }
 </style>
 </head>
 <body>
 
-  <div class="scroll-progress" id="scrollProgress"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
 
-  <!-- HEADER -->
-  <header class="header" id="siteHeader">
-    <div class="brand">
-      <i class="bi bi-ticket-perforated-fill icon-bounce"></i>
-      <b>Event_Hub</b>
+<header class="header" id="siteHeader">
+  <div class="brand">
+    <i class="bi bi-ticket-perforated-fill icon-bounce"></i>
+    <b>Event_Hub</b>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <h1 id="heroTitle">Digital Transformation Summit 2024</h1>
+    <p id="heroSub">The future of web development is here. Join us for a deep dive into Next.js and Vercel.</p>
+  </div>
+</section>
+
+<main class="container">
+  <!-- LEFT -->
+  <div>
+    <section class="about" id="about">
+      <h2>About the Event</h2>
+      <p>A full day of talks from the creators of Next.js and the community. Learn about the latest features, best practices, and the future of the framework. Sessions cover everything from server components to advanced routing patterns.</p>
+    </section>
+
+    <div class="schedule-title" id="scheduleTitle">Schedule</div>
+
+    <div class="timeline" id="timeline">
+      <div class="event">
+        <div class="event-marker"><i class="bi bi-clock"></i></div>
+        <div class="event-time">09:00 AM</div>
+        <div class="event-title">Keynote: The Future of the Web</div>
+        <div class="event-speaker">By Jane Doe</div>
+        <div class="event-desc">An opening talk about the direction of web development and Next.js.</div>
+      </div>
+
+      <div class="event">
+        <div class="event-marker"><i class="bi bi-clock"></i></div>
+        <div class="event-time">10:00 AM</div>
+        <div class="event-title">Mastering Server Components</div>
+        <div class="event-speaker">By John Smith</div>
+        <div class="event-desc">A deep dive into React Server Components and their use in Next.js.</div>
+      </div>
+
+      <div class="event">
+        <div class="event-marker"><i class="bi bi-clock"></i></div>
+        <div class="event-time">11:00 AM</div>
+        <div class="event-title">Coffee Break</div>
+        <div class="event-desc">Networking and coffee.</div>
+      </div>
+
+      <div class="event">
+        <div class="event-marker"><i class="bi bi-clock"></i></div>
+        <div class="event-time">11:30 AM</div>
+        <div class="event-title">Panel: The State of Jamstack</div>
+        <div class="event-desc">A discussion with industry experts.</div>
+      </div>
+
+      <div class="event">
+        <div class="event-marker"><i class="bi bi-clock"></i></div>
+        <div class="event-time">12:30 PM</div>
+        <div class="event-title">Lunch Break</div>
+        <div class="event-desc">Enjoy a provided lunch.</div>
+      </div>
     </div>
-  </header>
+  </div>
 
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
-    <div class="hero-inner" id="heroInner">
-      <h1 id="heroTitle">Digital Transformation Summit 2024</h1>
-      <p id="heroSub">The future of web development is here. Join us for a deep dive into Next.js and Vercel.</p>
+  <!-- RIGHT -->
+  <aside>
+    <div class="card" id="registerCard">
+      <h3>Register Now</h3>
+
+      <div class="card-row">
+        <i class="bi bi-calendar-event"></i>
+        <div>
+          <div class="meta-title">October 26, 2024</div>
+          <div class="meta-sub">Event Date</div>
+        </div>
+      </div>
+
+      <div class="card-row">
+        <i class="bi bi-geo-alt"></i>
+        <div>
+          <div class="meta-title">Virtual</div>
+          <div class="meta-sub">Venue</div>
+        </div>
+      </div>
+
+      <button id="registerBtn" class="register-btn" style="margin-top:15px;">
+        🎫 Register for this event
+      </button>
+    </div>
+  </aside>
+
+  <!-- Modal -->
+  <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true" style="display:none;">
+    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button id="modalClose" class="modal-close" aria-label="Close">&times;</button>
+
+      <h2 id="modalTitle" class="modal-title">Register for This Event</h2>
+
+      <form id="regForm" novalidate>
+        <div class="row">
+          <label>
+            <span class="lbl">Name *</span>
+            <input id="name" name="name" type="text" required />
+          </label>
+
+          <label>
+            <span class="lbl">Email *</span>
+            <input id="email" name="email" type="email" required />
+          </label>
+        </div>
+
+        <div class="row">
+          <label>
+            <span class="lbl">Department *</span>
+            <input id="department" name="department" type="text" required />
+          </label>
+
+          <label>
+            <span class="lbl">University Roll No. *</span>
+            <input id="roll" name="roll" type="text" required />
+          </label>
+        </div>
+
+        <div class="row">
+          <label>
+            <span class="lbl">Phone *</span>
+            <input id="phone" name="phone" type="tel" inputmode="tel" pattern="\d{6,15}" required />
+          </label>
+
+          <label>
+            <span class="lbl">Food Preference</span>
+            <select id="food" name="food">
+              <option>No preference</option>
+              <option>Vegetarian</option>
+              <option>Vegan</option>
+              <option>Halal</option>
+              <option>Other</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button type="button" id="cancelBtn" class="btn-ghost">Cancel</button>
+          <button type="submit" id="submitBtn" class="btn-primary">
+            <span class="btn-text">Submit</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+        </div>
+      </form>
+
+      <div id="successPanel" class="success-panel" aria-hidden="true" style="display:none;">
+        <svg class="checkmark" viewBox="0 0 52 52" aria-hidden="true">
+          <circle cx="26" cy="26" r="25" fill="none" stroke="#2f6bff" stroke-width="2" />
+          <path class="check" fill="none" stroke="#2f6bff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M14 27l7 7 17-17"/>
+        </svg>
+        <div class="success-text">Registration complete</div>
+        <div class="success-sub">Thanks — we have recorded your registration.</div>
+      </div>
+
+      <canvas id="confettiCanvas" class="confetti-canvas" aria-hidden="true"></canvas>
+    </div>
+  </div>
+
+  <!-- Speakers -->
+  <section class="speakers-section" id="speakersSection">
+    <h2 style="font-size:32px; font-weight:800; margin:0 0 10px;">Speakers</h2>
+    <div class="speakers-grid">
+      <div class="speaker-card">
+        <div class="speaker-top">
+          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=160&q=80" alt="Jane Doe">
+          <div>
+            <h3>Jane Doe</h3>
+            <p>Lead Engineer, Vercel</p>
+          </div>
+        </div>
+        <p class="speaker-bio">Jane is a lead engineer at Vercel, focusing on the Next.js framework. She is passionate about open-source and building performant web experiences.</p>
+      </div>
+
+      <div class="speaker-card">
+        <div class="speaker-top">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=160&q=80" alt="John Smith">
+          <div>
+            <h3>John Smith</h3>
+            <p>Developer Advocate, Google</p>
+          </div>
+        </div>
+        <p class="speaker-bio">John is a developer advocate at Google, specializing in web performance and Core Web Vitals. He loves helping developers build faster websites.</p>
+      </div>
     </div>
   </section>
 
-  <!-- CONTENT -->
-  <main class="container">
-
-    <!-- LEFT -->
-    <div>
-      <section class="about" id="about">
-        <h2>About the Event</h2>
-        <p>A full day of talks from the creators of Next.js and the community. Learn about the latest features, best practices, and the future of the framework. Sessions cover everything from server components to advanced routing patterns.</p>
-      </section>
-
-      <div class="schedule-title" id="scheduleTitle">Schedule</div>
-
-      <div class="timeline" id="timeline">
-        <div class="event">
-          <div class="event-marker"><i class="bi bi-clock"></i></div>
-          <div class="event-time">09:00 AM</div>
-          <div class="event-title">Keynote: The Future of the Web</div>
-          <div class="event-speaker">By Jane Doe</div>
-          <div class="event-desc">An opening talk about the direction of web development and Next.js.</div>
-        </div>
-
-        <div class="event">
-          <div class="event-marker"><i class="bi bi-clock"></i></div>
-          <div class="event-time">10:00 AM</div>
-          <div class="event-title">Mastering Server Components</div>
-          <div class="event-speaker">By John Smith</div>
-          <div class="event-desc">A deep dive into React Server Components and their use in Next.js.</div>
-        </div>
-
-        <div class="event">
-          <div class="event-marker"><i class="bi bi-clock"></i></div>
-          <div class="event-time">11:00 AM</div>
-          <div class="event-title">Coffee Break</div>
-          <div class="event-desc">Networking and coffee.</div>
-        </div>
-
-        <div class="event">
-          <div class="event-marker"><i class="bi bi-clock"></i></div>
-          <div class="event-time">11:30 AM</div>
-          <div class="event-title">Panel: The State of Jamstack</div>
-          <div class="event-desc">A discussion with industry experts.</div>
-        </div>
-
-        <div class="event">
-          <div class="event-marker"><i class="bi bi-clock"></i></div>
-          <div class="event-time">12:30 PM</div>
-          <div class="event-title">Lunch Break</div>
-          <div class="event-desc">Enjoy a provided lunch.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT -->
-    <aside>
-      <div class="card" id="registerCard">
-        <h3>Register Now</h3>
-
-        <div class="card-row">
-          <i class="bi bi-calendar-event"></i>
-          <div>
-            <div class="meta-title">October 26, 2024</div>
-            <div class="meta-sub">Event Date</div>
-          </div>
-        </div>
-
-        <div class="card-row">
-          <i class="bi bi-geo-alt"></i>
-          <div>
-            <div class="meta-title">Virtual</div>
-            <div class="meta-sub">Venue</div>
-          </div>
-        </div>
-
-       <button id="registerBtn" class="register-btn" style="margin-top:15px;">
-    🎫 Register for this event
-  </button>
-</div>
-<!-- Modal backdrop + modal -->
-<div id="modalBackdrop" class="modal-backdrop" aria-hidden="true" style="display:none;">
-  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <button id="modalClose" class="modal-close" aria-label="Close">&times;</button>
-
-    <h2 id="modalTitle" class="modal-title">Register for This Event</h2>
-
-    <form id="regForm" novalidate>
-      <div class="row">
-        <label>
-          <span class="lbl">Name *</span>
-          <input id="name" name="name" type="text" required />
-        </label>
-
-        <label>
-          <span class="lbl">Email *</span>
-          <input id="email" name="email" type="email" required />
-        </label>
-      </div>
-
-      <div class="row">
-        <label>
-          <span class="lbl">Department *</span>
-          <input id="department" name="department" type="text" required />
-        </label>
-
-        <label>
-          <span class="lbl">University Roll No. *</span>
-          <input id="roll" name="roll" type="text" required />
-        </label>
-      </div>
-
-      <div class="row">
-        <label>
-          <span class="lbl">Phone *</span>
-          <input id="phone" name="phone" type="tel" inputmode="tel" pattern="\d{6,15}" required />
-        </label>
-
-        <label>
-          <span class="lbl">Food Preference</span>
-          <select id="food" name="food">
-            <option>No preference</option>
-            <option>Vegetarian</option>
-            <option>Vegan</option>
-            <option>Halal</option>
-            <option>Other</option>
-          </select>
-        </label>
-      </div>
-
-      <div class="actions">
-        <button type="button" id="cancelBtn" class="btn-ghost">Cancel</button>
-        <button type="submit" id="submitBtn" class="btn-primary">
-          <span class="btn-text">Submit</span>
-          <span class="btn-spinner" aria-hidden="true"></span>
-        </button>
-      </div>
-    </form>
-
-    <!-- success panel (hidden until submit) -->
-    <div id="successPanel" class="success-panel" aria-hidden="true" style="display:none;">
-      <svg class="checkmark" viewBox="0 0 52 52" aria-hidden="true">
-        <circle cx="26" cy="26" r="25" fill="none" stroke="#2f6bff" stroke-width="2" />
-        <path class="check" fill="none" stroke="#2f6bff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M14 27l7 7 17-17"/>
-      </svg>
-      <div class="success-text">Registration complete</div>
-      <div class="success-sub">Thanks — we have recorded your registration.</div>
-    </div>
-
-    <!-- confetti canvas sits over the modal backdrop -->
-    <canvas id="confettiCanvas" class="confetti-canvas" aria-hidden="true"></canvas>
-  </div>
-</div>
-        
-      </div>
-    </aside>
-
-    <!-- Speakers -->
-    <section class="speakers-section" id="speakersSection">
-      <h2 style="font-size:32px; font-weight:800; margin:0 0 10px;">Speakers</h2>
-      <div class="speakers-grid" id="speakersGrid">
-        <div class="speaker-card">
-          <div class="speaker-top">
-            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=160&q=80" alt="Jane Doe">
-            <div>
-              <h3>Jane Doe</h3>
-              <p>Lead Engineer, Vercel</p>
-            </div>
-          </div>
-          <p class="speaker-bio">Jane is a lead engineer at Vercel, focusing on the Next.js framework. She is passionate about open-source and building performant web experiences.</p>
-        </div>
-
-        <div class="speaker-card">
-          <div class="speaker-top">
-            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=160&q=80" alt="John Smith">
-            <div>
-              <h3>John Smith</h3>
-              <p>Developer Advocate, Google</p>
-            </div>
-          </div>
-          <p class="speaker-bio">John is a developer advocate at Google, specializing in web performance and Core Web Vitals. He loves helping developers build faster websites.</p>
-        </div>
-      </div>
-    </section>
-
-  </main>
+</main>
 
 <script>
-  // Respect prefers-reduced-motion
+(() => {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Header & hero entrance
+  /* HEADER + HERO ON LOAD */
   window.addEventListener('load', () => {
     const header = document.getElementById('siteHeader');
-    if (!reduced) setTimeout(()=> header.classList.add('visible'), 120); else header.classList.add('visible');
-
     const hero = document.getElementById('hero');
-    if (!reduced) setTimeout(()=> hero.classList.add('show'), 160); else hero.classList.add('show');
+    if (header) header.classList.add('visible');
+    if (hero) hero.classList.add('show');
+
+    // Reveal all sections (simple, no IntersectionObserver)
+    document.querySelectorAll('.about, .schedule-title, .card, .event, .speakers-section, .speaker-card')
+      .forEach(el => el.classList.add('visible'));
   });
 
-  // Scroll progress bar
+  /* SCROLL PROGRESS BAR */
   const progress = document.getElementById('scrollProgress');
-  const updateProgress = () => {
+  function updateProgress() {
+    if (!progress) return;
     const h = document.documentElement;
     const scrollTop = h.scrollTop || document.body.scrollTop;
     const docHeight = h.scrollHeight - h.clientHeight;
     const pct = docHeight ? (scrollTop / docHeight) : 0;
     progress.style.transform = `scaleX(${pct})`;
-  };
+  }
   window.addEventListener('scroll', updateProgress, { passive: true });
   updateProgress();
 
-  // Hero parallax on mouse move
+  /* HERO PARALLAX */
+  const hero = document.getElementById('hero');
   const heroBg = document.getElementById('heroBg');
-  const heroEl = document.getElementById('hero');
-  if (!reduced && heroEl && heroBg) {
-    heroEl.addEventListener('mousemove', (e) => {
-      const r = heroEl.getBoundingClientRect();
+  if (hero && heroBg && !reduced) {
+    hero.addEventListener('mousemove', (e) => {
+      const r = hero.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width - 0.5;
       const py = (e.clientY - r.top) / r.height - 0.5;
-      const tx = px * 14; const ty = py * 10;
+      const tx = px * 14, ty = py * 10;
       heroBg.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(1.02)`;
     });
-    heroEl.addEventListener('mouseleave', () => heroBg.style.transform = 'translate3d(0,0,0) scale(1)');
+    hero.addEventListener('mouseleave', () => {
+      heroBg.style.transform = 'translate3d(0,0,0) scale(1)';
+    });
   }
 
-  // IntersectionObserver for reveals
-  const obsOptions = { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.12 };
-  const revealObserver = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        obs.unobserve(entry.target);
-      }
-    });
-  }, obsOptions);
-
-  // Observe elements: about (whole), schedule title, register card, speakers section
-  const aboutEl = document.getElementById('about');
-  if (aboutEl) revealObserver.observe(aboutEl);
-  const st = document.getElementById('scheduleTitle'); if (st) revealObserver.observe(st);
-  const reg = document.getElementById('registerCard'); if (reg) revealObserver.observe(reg);
-  const sp = document.getElementById('speakersSection'); if (sp) revealObserver.observe(sp);
-
-  // Stagger timeline events
-  const timelineContainer = document.getElementById('timeline');
-  if (timelineContainer) {
-    const events = timelineContainer.querySelectorAll('.event');
-    const tlObs = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          events.forEach((ev, i) => setTimeout(()=> ev.classList.add('visible'), i * 120));
-          obs.unobserve(entry.target);
-        }
-      });
-    }, {...obsOptions, threshold:0.06});
-    tlObs.observe(timelineContainer);
-  }
-
-  // Stagger speakers
-  if (sp) {
-    const cards = document.querySelectorAll('.speaker-card');
-    const spObs = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          cards.forEach((c, i) => setTimeout(()=> c.classList.add('visible'), i * 140));
-          obs.unobserve(entry.target);
-        }
-      });
-    }, {...obsOptions, threshold: 0.12});
-    spObs.observe(sp);
-  }
-
-  // Speaker card tilt on mouse move
-  document.querySelectorAll('.speaker-card').forEach(card => {
-    if (reduced) return;
-    card.addEventListener('mousemove', (e) => {
-      const r = card.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - 0.5;
-      const py = (e.clientY - r.top) / r.height - 0.5;
-      const tiltX = (py * 7).toFixed(2);
-      const tiltY = (-px * 7).toFixed(2);
-      card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(0)`;
-      card.style.transition = 'transform 120ms ease';
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-      card.style.transition = 'transform 260ms cubic-bezier(.2,.9,.3,1)';
-    });
-  });
-
-  // Register button ripple
+  /* REGISTER BUTTON RIPPLE */
   const registerBtn = document.getElementById('registerBtn');
   if (registerBtn) {
     registerBtn.addEventListener('click', (e) => {
@@ -595,283 +527,202 @@
       ripple.style.opacity = '0.9';
       ripple.style.transition = 'transform 560ms cubic-bezier(.2,.9,.3,1), opacity 560ms ease';
       registerBtn.appendChild(ripple);
-      requestAnimationFrame(()=> {
+      requestAnimationFrame(() => {
         ripple.style.transform = 'scale(1)';
         ripple.style.opacity = '0';
       });
-      setTimeout(()=> ripple.remove(), 700);
-    });
+      setTimeout(() => ripple.remove(), 700);
+    }, { passive: false });
   }
 
-  // Marker hover bounce
-  document.addEventListener('mouseover', (e) => {
-    const m = e.target.closest('.event-marker');
-    if (m && !reduced) {
-      m.animate([{ transform:'scale(1)' }, { transform:'scale(1.08)' }, { transform:'scale(1)' }], { duration: 420, easing: 'ease-out' });
-    }
-  });
-
-  // If reduced motion, reveal everything immediately
-  if (reduced) {
-    document.querySelectorAll('.event, .card, .speaker-card, .about, .schedule-title, .speakers-section').forEach(n => n.classList.add('visible'));
-    const hero = document.getElementById('hero'); if (hero) hero.classList.add('show');
-    document.getElementById('siteHeader').classList.add('visible');
-  }
-(function(){
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // elements
-  const registerBtn = document.getElementById('registerBtn');
+  /* MODAL + FORM + CONFETTI */
   const backdrop = document.getElementById('modalBackdrop');
   const modal = document.getElementById('modal');
   const closeBtn = document.getElementById('modalClose');
-  const cancelBtn = document.getElementById('cancelBtn'); // optional (not in this markup)
+  const cancelBtn = document.getElementById('cancelBtn');
   const form = document.getElementById('regForm');
-  const submitBtn = document.getElementById('submitBtn') || document.getElementById('submitBtn'); // safe
   const successPanel = document.getElementById('successPanel');
   const confettiCanvas = document.getElementById('confettiCanvas');
+  let confettiCtx = null, confettiParticles = [], confettiAnimId = null;
 
-  // fallback selectors
-  const cancelButton = document.getElementById('cancelBtn'); // if exists
-  const submitButton = document.getElementById('submitBtn');
-
-  // helper to safely query elements inside modal
-  const q = sel => modal.querySelector(sel);
-
-  // open modal
-  function openModal(){
+  function openModal() {
+    if (!backdrop || !modal) return;
     backdrop.style.display = 'flex';
-    // small delay to allow paint then add show class
-    requestAnimationFrame(() => { modal.classList.add('show'); });
     backdrop.setAttribute('aria-hidden', 'false');
-    // focus first input
-    const first = q('input,select,button,textarea');
-    if(first) first.focus();
-    // trap focus minimal: listen for tab at the edges
-    document.addEventListener('keydown', handleKey);
+    requestAnimationFrame(() => modal.classList.add('show'));
+    resizeCanvas();
+    const first = modal.querySelector('input,select,button,textarea');
+    if (first) first.focus();
+    document.addEventListener('keydown', onKeyDown);
   }
 
-  function closeModal(){
+  function closeModal() {
+    if (!backdrop || !modal) return;
     modal.classList.remove('show');
     backdrop.style.display = 'none';
-    backdrop.setAttribute('aria-hidden','true');
-    document.removeEventListener('keydown', handleKey);
-    registerBtn.focus();
+    backdrop.setAttribute('aria-hidden', 'true');
+    document.removeEventListener('keydown', onKeyDown);
+
+    if (form) {
+      form.reset();
+      form.style.display = '';
+      form.style.opacity = '';
+      form.style.transform = '';
+    }
+    if (successPanel) {
+      successPanel.style.display = 'none';
+      successPanel.classList.remove('active');
+    }
+    stopConfetti();
   }
 
-  // handle Escape key close
-  function handleKey(e){
-    if(e.key === 'Escape') closeModal();
+  function onKeyDown(e) {
+    if (e.key === 'Escape') closeModal();
   }
 
-  // open on trigger
-  if(registerBtn) registerBtn.addEventListener('click', (ev) => {
-    ev.preventDefault(); openModal();
-  });
-
-  // close handlers
-  closeBtn.addEventListener('click', closeModal);
-  if(cancelButton) cancelButton.addEventListener('click', closeModal);
-  backdrop.addEventListener('click', (e) => { if(e.target === backdrop) closeModal(); });
-
-  // validation helper (simple)
-  function validate(values){
-    const errs = {};
-    if(!values.name) errs.name='Enter name';
-    if(!values.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) errs.email='Enter valid email';
-    if(!values.department) errs.department='Department required';
-    if(!values.roll) errs.roll='Roll no required';
-    if(!values.phone || !/^\d{6,15}$/.test(values.phone)) errs.phone='Phone must be 6–15 digits';
-    return errs;
+  if (registerBtn) {
+    registerBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal();
+    });
   }
-
-  // show inline error by adding class to input
-  function showErrors(errs){
-    // clear previous
-    modal.querySelectorAll('input,select').forEach(el => el.classList.remove('field-error'));
-    Object.keys(errs).forEach(k => {
-      const el = modal.querySelector(`#${k}`) || modal.querySelector(`[name="${k}"]`) || modal.querySelector(`#${k}`);
-      if(el) el.classList.add('field-error');
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+  if (backdrop) {
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) closeModal();
     });
   }
 
-  // success animation: show success panel and confetti
-  function playSuccessAnimation() {
-    // hide form smoothly
-    const formEl = form;
-    formEl.style.transition = 'opacity 260ms ease, transform 360ms cubic-bezier(.2,.9,.3,1)';
-    formEl.style.opacity = '0';
-    formEl.style.transform = 'scale(0.98) translateY(-6px)';
-
-    // after small delay, show success panel
-    setTimeout(() => {
-      formEl.style.display = 'none';
-      successPanel.style.display = 'block';
-      successPanel.classList.add('active'); // triggers check stroke animation via CSS
-      // animate checkmark stroke by toggling class (CSS handles stroke-dashoffset)
-      // start confetti
-      if(!reduced) startConfetti();
-      // auto close modal after a delay
-      setTimeout(() => {
-        // clean up confetti after short time
-        stopConfetti();
-        // optionally close modal after showing success
-        closeModal();
-        // reset form for next use
-        form.reset();
-        // restore for next open
-        form.style.display = '';
-        form.style.opacity = '';
-        form.style.transform = '';
-        successPanel.style.display = 'none';
-        successPanel.classList.remove('active');
-      }, 2000);
-    }, 300);
-  }
-
-  // tiny helpers to get form values
-  function getFormValues(){
+  function getValues() {
+    if (!modal) return {};
     return {
-      name: q('#name').value.trim(),
-      email: q('#email').value.trim(),
-      department: q('#department').value.trim(),
-      roll: q('#roll').value.trim(),
-      phone: q('#phone').value.trim(),
-      food: q('#food').value
+      name: modal.querySelector('#name')?.value.trim() || '',
+      email: modal.querySelector('#email')?.value.trim() || '',
+      department: modal.querySelector('#department')?.value.trim() || '',
+      roll: modal.querySelector('#roll')?.value.trim() || '',
+      phone: modal.querySelector('#phone')?.value.trim() || '',
+      food: modal.querySelector('#food')?.value || ''
     };
   }
 
-  // submit handler
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const values = getFormValues();
-    const errs = validate(values);
-    if(Object.keys(errs).length) {
-      showErrors(errs);
-      // focus first error
-      const first = Object.keys(errs)[0];
-      const el = modal.querySelector(`#${first}`) || modal.querySelector(`[name="${first}"]`);
-      if(el) el.focus();
-      return;
-    }
-
-    // disable submit & show spinner
-    const submit = e.submitter || modal.querySelector('.btn-primary');
-    if(submit) {
-      submit.disabled = true;
-      const spinner = submit.querySelector('.btn-spinner');
-      if(spinner) spinner.style.display = 'inline-block';
-    }
-
-    // simulate a network / processing delay
-    setTimeout(() => {
-      // store to localStorage (demo) — optional
-      try {
-        const key = 'demo_event_regs_v2';
-        const arr = JSON.parse(localStorage.getItem(key) || '[]');
-        arr.push({...values, ts: new Date().toISOString()});
-        localStorage.setItem(key, JSON.stringify(arr));
-      } catch(e) { /* ignore */ }
-
-      // play success animation
-      playSuccessAnimation();
-
-      // re-enable submit button for future use
-      if(submit) {
-        submit.disabled = false;
-        const spinner = submit.querySelector('.btn-spinner');
-        if(spinner) spinner.style.display = 'none';
-      }
-    }, 700);
-  });
-
-  /* ========== Simple Confetti System ========== */
-  let confettiCtx, confettiAnimId, confettiParticles = [], confettiRunning = false;
-  function ensureCanvas(){
-    if(!confettiCanvas) return null;
-    confettiCanvas.width = confettiCanvas.offsetWidth;
-    confettiCanvas.height = confettiCanvas.offsetHeight;
-    confettiCtx = confettiCanvas.getContext('2d');
-    return confettiCtx;
+  function validate(values) {
+    const errs = {};
+    if (!values.name) errs.name = 'Name required';
+    if (!values.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) errs.email = 'Valid email required';
+    if (!values.department) errs.department = 'Department required';
+    if (!values.roll) errs.roll = 'Roll required';
+    if (!values.phone || !/^\d{6,15}$/.test(values.phone)) errs.phone = 'Phone 6–15 digits';
+    return errs;
   }
 
+  function showErrors(errs) {
+    if (!modal) return;
+    modal.querySelectorAll('input,select').forEach(el => el.classList.remove('field-error'));
+    Object.keys(errs).forEach(k => {
+      const el = modal.querySelector('#' + k);
+      if (el) el.classList.add('field-error');
+    });
+  }
+
+  function playSuccessAnimation() {
+    if (!form || !successPanel) return;
+    form.style.transition = 'opacity 260ms ease, transform 360ms cubic-bezier(.2,.9,.3,1)';
+    form.style.opacity = '0';
+    form.style.transform = 'scale(0.98) translateY(-6px)';
+
+    setTimeout(() => {
+      form.style.display = 'none';
+      successPanel.style.display = 'block';
+      successPanel.classList.add('active');
+      if (!reduced) startConfetti();
+      setTimeout(() => {
+        closeModal();
+      }, 1800);
+    }, 260);
+  }
+
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const values = getValues();
+      const errs = validate(values);
+      if (Object.keys(errs).length) {
+        showErrors(errs);
+        return;
+      }
+      const submitBtn = document.getElementById('submitBtn');
+      const spinner = submitBtn?.querySelector('.btn-spinner');
+      if (submitBtn && spinner) {
+        submitBtn.disabled = true;
+        spinner.style.display = 'inline-block';
+      }
+
+      setTimeout(() => {
+        if (submitBtn && spinner) {
+          submitBtn.disabled = false;
+          spinner.style.display = 'none';
+        }
+        playSuccessAnimation();
+      }, 700);
+    });
+  }
+
+  function resizeCanvas() {
+    if (!confettiCanvas || !modal) return;
+    confettiCanvas.width = modal.clientWidth;
+    confettiCanvas.height = modal.clientHeight;
+    confettiCtx = confettiCanvas.getContext('2d');
+  }
+  window.addEventListener('resize', resizeCanvas);
+
   function startConfetti() {
-    if(!confettiCanvas) return;
-    if(confettiRunning) return;
-    ensureCanvas();
+    if (!confettiCanvas || !confettiCtx) return;
     confettiParticles = [];
-    const count = Math.min(80, Math.floor((confettiCanvas.width + confettiCanvas.height) / 12));
-    for(let i=0;i<count;i++){
+    const count = 70;
+    for (let i = 0; i < count; i++) {
       confettiParticles.push({
-        x: confettiCanvas.width/2 + (Math.random()-0.5)*200,
-        y: confettiCanvas.height/4 + (Math.random()-0.5)*80,
-        vx: (Math.random()-0.5)*6,
-        vy: Math.random()*6 + 2,
-        size: Math.random()*8+6,
-        rot: Math.random()*360,
-        vr: (Math.random()-0.5)*6,
+        x: confettiCanvas.width / 2 + (Math.random() - 0.5) * 120,
+        y: confettiCanvas.height / 4 + (Math.random() - 0.5) * 60,
+        vx: (Math.random() - 0.5) * 6,
+        vy: Math.random() * 6 + 2,
+        size: Math.random() * 8 + 6,
+        rot: Math.random() * 360,
+        vr: (Math.random() - 0.5) * 6,
         color: `hsl(${Math.floor(Math.random()*60 + 200)},70%,55%)`
       });
     }
-    confettiRunning = true;
     renderConfetti();
-    // stop after ~1.6s
-    setTimeout(stopConfetti, 1600);
   }
 
-  function renderConfetti(){
-    if(!confettiCtx) return;
+  function renderConfetti() {
+    if (!confettiCtx || !confettiCanvas) return;
     confettiCtx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
-    for(let p of confettiParticles){
+    confettiParticles.forEach(p => {
       p.x += p.vx;
       p.y += p.vy;
-      p.vy += 0.18; // gravity
+      p.vy += 0.18;
       p.rot += p.vr;
       confettiCtx.save();
       confettiCtx.translate(p.x, p.y);
-      confettiCtx.rotate(p.rot * Math.PI/180);
+      confettiCtx.rotate(p.rot * Math.PI / 180);
       confettiCtx.fillStyle = p.color;
       confettiCtx.fillRect(-p.size/2, -p.size/2, p.size, p.size*0.6);
       confettiCtx.restore();
-    }
-    // fade out later
+    });
     confettiParticles = confettiParticles.filter(p => p.y < confettiCanvas.height + 60);
     confettiAnimId = requestAnimationFrame(renderConfetti);
   }
 
-  function stopConfetti(){
-    confettiRunning = false;
-    if(confettiAnimId) cancelAnimationFrame(confettiAnimId);
-    if(confettiCtx) confettiCtx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
-  }
-
-  // ensure canvas resizes with modal
-  function resizeCanvas(){
-    if(confettiCanvas) {
-      confettiCanvas.width = modal.clientWidth;
-      confettiCanvas.height = modal.clientHeight;
+  function stopConfetti() {
+    if (confettiAnimId) cancelAnimationFrame(confettiAnimId);
+    if (confettiCtx && confettiCanvas) {
+      confettiCtx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
     }
   }
-  window.addEventListener('resize', () => { if(!reduced) resizeCanvas(); });
-  // prepare canvas when opening modal
-  const origOpen = openModal;
-  // wrap openModal to also size canvas
-  const newOpen = function(){ resizeCanvas(); origOpen(); };
-  // replace openModal reference used earlier
-  // but easier: override registerBtn handler to call newOpen
-  if(registerBtn) {
-    registerBtn.removeEventListener('click', openModal);
-    registerBtn.addEventListener('click', (ev) => { ev.preventDefault(); resizeCanvas(); modal.classList.add('show'); backdrop.style.display='flex'; backdrop.setAttribute('aria-hidden','false'); const first = modal.querySelector('input,select,button,textarea'); if(first) first.focus(); document.addEventListener('keydown', handleKey); });
-  }
-
-  // initial hide of successPanel and ensure canvas size
-  if(successPanel) { successPanel.style.display = 'none'; }
-  if(confettiCanvas) { confettiCanvas.style.width = '100%'; confettiCanvas.style.height = '100%'; confettiCanvas.width = modal.clientWidth; confettiCanvas.height = modal.clientHeight; }
 
 })();
-
-
-
 </script>
+
 </body>
 </html>
